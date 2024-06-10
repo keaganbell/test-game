@@ -72,11 +72,12 @@ b8 game_shutdown()
     return true;
 }
 
+static Color color_last_frame = BLACK;
 b8 update_title(game_t *game)
 {
-    persist Color color_last_frame = BLACK;
     Color color_this_frame = {};
-    interpolate_color(&color_this_frame, color_last_frame, RAYWHITE, 0.015f);
+    interpolate_color(&color_this_frame, color_last_frame, RAYWHITE, 2.0f);
+    color_last_frame = color_this_frame;
 
     // begin the rendering ////////////////////////////////////
     BeginDrawing();

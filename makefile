@@ -14,15 +14,15 @@ OBJS:=$(patsubst $(SRCDIR)/%.c, $(OBJDIR)/%.o, $(SRCS))
 CC:=cc
 CFLAGS:=-Wall -Wextra -g
 
-include $(SRCDIR)/corelib/makefile
 include $(SRCDIR)/gamelib/makefile
+include $(SRCDIR)/corelib/makefile
 
-all: $(CORETARGET) $(GAMEDLTARGET) $(TARGET) 
+all: | build-dirs $(TARGET) $(CORETARGET) $(GAMEDLTARGET) 
 
 $(TARGET): $(OBJS)
 	$(CC) $(CFLAGS) $(INCS) -o $@ $^ $(LIBS)
 
-$(OBJDIR)/%.o: $(SRCDIR)/%.c | build-dirs
+$(OBJDIR)/%.o: $(SRCDIR)/%.c
 	$(CC) $(CFLAGS) $(INCS) -o $@ -c $< $(LIBS)
 
 .PHONY: clean
