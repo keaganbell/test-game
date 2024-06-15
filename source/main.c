@@ -57,6 +57,7 @@ int main(void)
 
 
     // begin the game loop ///////////////////////////////////////////////////
+    SetConfigFlags(FLAG_WINDOW_RESIZABLE | FLAG_WINDOW_ALWAYS_RUN);
     InitWindow(1200, 800, "My Game Window");
     SetWindowPosition(0,0);
     SetTargetFPS(60);
