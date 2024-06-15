@@ -9,7 +9,7 @@
 #include "loaddl.h"
 
 
-global game_state_t *game_state;
+game_state_t *game_state;
 
 
 b8 init_app(game_t *game)
@@ -58,6 +58,7 @@ int main(void)
 
     // begin the game loop ///////////////////////////////////////////////////
     InitWindow(1200, 800, "My Game Window");
+    SetWindowPosition(0,0);
     SetTargetFPS(60);
     while (!WindowShouldClose())
     {

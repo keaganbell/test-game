@@ -1,7 +1,7 @@
 PROJ_ROOT:=$(shell pwd)
 PROJ_NAME:=test-game
 TARGET:=$(PROJ_ROOT)/$(PROJ_NAME)
-LIBS:=-lraylib -lm
+LIBS:=-lraylib -lm -ldl
 INCS:=-I$(PROJ_ROOT)/source -I$(PROJ_ROOT)/source/corelib
 
 SRCDIR:=$(PROJ_ROOT)/source
@@ -17,7 +17,7 @@ CFLAGS:=-Wall -Wextra -g
 include $(SRCDIR)/gamelib/makefile
 include $(SRCDIR)/corelib/makefile
 
-all: | build-dirs $(TARGET) $(CORETARGET) $(GAMEDLTARGET) 
+all: build-dirs $(TARGET) $(CORETARGET) $(GAMEDLTARGET) 
 
 $(TARGET): $(OBJS)
 	$(CC) $(CFLAGS) $(INCS) -o $@ $^ $(LIBS)

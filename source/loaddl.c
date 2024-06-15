@@ -3,7 +3,7 @@
 
 #include "loaddl.h"
 
-global void *dl = NULL;
+static void *dl = NULL;
 
 b8 load_game_dl(game_t *game)
 {
