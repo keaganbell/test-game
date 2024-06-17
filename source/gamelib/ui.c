@@ -54,6 +54,10 @@ b8 button(ui_context_t *ui, button_t *button)
     {
         ui->hot.id = button->uiid.id;
     }
+    else
+    {
+        ui->hot.id = 0;
+    }
 
     // draw the button /////////////////////////////////////////////////
     DrawRectangleRec(button->rect, button->color);
