@@ -1,39 +1,27 @@
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include <stdlib.h> // malloc
+#include <string.h> // memset
 
 #include <raylib.h>
 
 #include "defines.h"
 #include "gamelib/game.h"
+#include "gamelib/hotkeys.h"
 #include "loaddl.h"
-
-
-game_state_t *game_state;
 
 
 b8 init_app(game_t *game)
 {
-    if (game == NULL)
-    {
-        printf("ERROR: game pointer was null.\n");
-        return false;
-    }
-
-    if (game_state != NULL)
-    {
-        printf("ERROR: tried to initialize the game twice.\n");
-        return false;
-    }
-
     if (!load_game_dl(game))
     {
         printf("ERROR: failed to load game library.\n");
         return false;
     }
-    game_state = malloc(sizeof(game_state_t));
-    memset(game_state, 0, sizeof(game_state_t));
-    game->game_state = game_state;
+    game->game_state = malloc(sizeof(game_state_t));
+    memset(game->game_state, 0, sizeof(game_state_t));
+
+    game->ui_context = malloc(sizeof(ui_context_t));
+    memset(game->ui_context, 0, sizeof(ui_context_t));
     return true;
 }
 
@@ -47,7 +35,6 @@ int main(void)
         return 1;
     }
 
-
     // initialized the game ///////////////////////////////////////////////////
     if (!game.init(&game))
     {
@@ -60,11 +47,11 @@ int main(void)
     SetConfigFlags(FLAG_WINDOW_RESIZABLE | FLAG_WINDOW_ALWAYS_RUN);
     InitWindow(1200, 800, "My Game Window");
     SetWindowPosition(0,0);
-    SetTargetFPS(60);
+//    SetTargetFPS(60);
     while (!WindowShouldClose())
     {
         // Hot reloading
-        if (IsKeyReleased(KEY_F7))
+        if (IsKeyReleased(KEY_HOTRELOAD))
         {
             if (!hot_reload(&game))
             {

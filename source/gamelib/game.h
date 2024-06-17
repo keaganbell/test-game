@@ -1,5 +1,6 @@
 #pragma once
 #include "defines.h"
+#include "gamelib/ui.h"
 
 #include <raylib.h>
 
@@ -20,6 +21,7 @@ typedef struct game_state
 typedef struct game
 {
     game_state_t *game_state;
+    ui_context_t *ui_context;
 
     b8 (*init)(struct game *game);
     b8 (*update)(struct game *game);
@@ -29,4 +31,3 @@ typedef struct game
 b8 update_title(game_t *game);
 b8 update_menu(game_t *game);
 b8 update_playing(game_t *game);
-b8 update_paused(game_t *game);

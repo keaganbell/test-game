@@ -1,4 +1,5 @@
-#include "game.h"
+#include "gamelib/game.h"
+#include "gamelib/ui.h"
 
 #include <raylib.h>
 
@@ -12,10 +13,10 @@ b8 game_init(game_t *game)
     game->game_state->camera.up = (Vector3){ 0.0f, 1.0f, 0.0f };          // Camera up vector (rotation towards target)
     game->game_state->camera.fovy = 45.0f;                                // Camera field-of-view Y
     game->game_state->camera.projection = CAMERA_PERSPECTIVE;             // Camera mode type
+    printf("INFO: camera initialized successfully.\n");
 
     // explicitly set the state mode to the title screen
     game->game_state->mode = TITLE;
-    printf("INFO: camera initialized successfully.\n");
     return true;
 }
 
@@ -49,14 +50,6 @@ b8 game_update(game_t *game)
             }
             break;
 
-        case PAUSED:
-            if (!update_paused(game))
-            {
-                printf("ERROR: failed to update the pause screen.\n");
-                return false;
-            }
-            break;
-
         default:
             printf("ERROR: uknown game state mode.\n");
             return false;
@@ -73,9 +66,28 @@ b8 game_shutdown()
 
 b8 update_title(game_t *game)
 {
+    i32 window_width = GetScreenWidth();
+    i32 window_height = GetScreenHeight();
+
+    button_t start_button = {
+        {1, 0, 0}, // uiid element {id, parent, child}
+        {500, 500, 60, 45}, // raylib Rectangle
+        "Start",
+        LIGHTGRAY
+    };
+     
     // begin the rendering ////////////////////////////////////
     BeginDrawing();
-    ClearBackground(LIGHTGRAY);
+    ClearBackground(DARKGRAY);
+    DrawFPS(10, 10);
+
+    // begin displaying UI elements
+    DrawText("Ark of the Covenant", window_width/2, window_height/2 - 25, 48, LIGHTGRAY);
+    if (button(game->ui_context, &start_button))
+    {
+        game->game_state->mode = PLAYING;
+    }
+
     EndDrawing();
     // end the rendering //////////////////////////////////////
     return true;
@@ -101,10 +113,5 @@ b8 update_playing(game_t *game)
     DrawFPS(10, 10);
     // end the rendering //////////////////////////////////////
     EndDrawing();
-    return true;
-}
-
-b8 update_paused(game_t *game)
-{
     return true;
 }

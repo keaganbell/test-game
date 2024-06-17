@@ -8,6 +8,11 @@ static void *dl = NULL;
 b8 load_game_dl(game_t *game)
 {
     dl = dlopen("libgame.so", RTLD_NOW);
+    if (!dl)
+    {
+        fprintf(stderr, "ERROR: %s\n", dlerror());
+        return false;
+    }
     game->init = dlsym(dl, "game_init");
     game->update = dlsym(dl, "game_update");
     game->shutdown = dlsym(dl, "game_shutdown");

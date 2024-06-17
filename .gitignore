@@ -1,3 +1,6 @@
 # any build artifacts
 build/
 test-game
+
+# any temp text buffers
+*.swp
