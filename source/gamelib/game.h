@@ -10,6 +10,7 @@ typedef enum state_mode
     MENU,
     PLAYING,
     PAUSED,
+    QUIT
 } state_mode_t;
 
 typedef struct game_state

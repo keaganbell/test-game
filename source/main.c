@@ -46,8 +46,7 @@ int main(void)
     // begin the game loop ///////////////////////////////////////////////////
     SetConfigFlags(FLAG_WINDOW_RESIZABLE | FLAG_WINDOW_ALWAYS_RUN);
     InitWindow(1200, 800, "My Game Window");
-    SetWindowPosition(0,0);
-//    SetTargetFPS(60);
+    SetTargetFPS(60);
     while (!WindowShouldClose())
     {
         // Hot reloading
@@ -59,7 +58,15 @@ int main(void)
                 break;
             }
         }
-        game.update(&game);
+        if (!game.update(&game))
+        {
+            printf("INFO: game is shutting down.\n");
+            if (!game.shutdown(&game))
+            {
+                printf("ERROR: game did not shutdown gracefully.\n");
+            }
+            break;
+        }
     }
     CloseWindow();
     return 0;

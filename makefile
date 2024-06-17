@@ -32,7 +32,7 @@ else ifeq ($(TARGET_CONFIG), release)
 endif
 
 ifeq ($(BUILD_CONFIG), dev)
-	$(CFLAGS) += -g -ggdb
+	$(CFLAGS) += -g
 	$(DEFINES) += -DHOTRELOAD
 else ifeq ($(BUILD_CONFIG), debug)
 	$(CFLAGS) += -g -O2

@@ -5,6 +5,70 @@
 
 #include <stdio.h>
 
+b8 update_title(game_t *game)
+{
+    i32 wwidth= GetScreenWidth();
+    i32 wheight = GetScreenHeight();
+
+    // build the title screen UI ////////////////////////////////////////////
+    button_t start_button = {
+        {1, 0, 0}, // uiid element {id, parent, child}
+        {wwidth/2, 500, 100, 25}, // raylib Rectangle
+        "Start Game", // button text
+        LIGHTGRAY // button background color
+    };
+
+    button_t quit_button = {
+        {2,0,0},
+        {wwidth/2, 550, 100, 25},
+        "Exit Game",
+        LIGHTGRAY
+    };
+     
+    // begin the rendering /////////////////////////////////////////////////
+    BeginDrawing();
+    ClearBackground(DARKGRAY);
+    DrawFPS(10, 10);
+
+    // begin displaying UI elements
+    DrawText("Ark of the Covenant", wwidth/2 - 200, wheight/2 - 50, 48, LIGHTGRAY);
+    if (button(game->ui_context, &start_button))
+    {
+        game->game_state->mode = PLAYING;
+    }
+    if (button(game->ui_context, &quit_button))
+    {
+        game->game_state->mode = QUIT;
+    }
+
+    EndDrawing();
+    // end the rendering ///////////////////////////////////////////////////
+    return true;
+}
+
+b8 update_menu(game_t *game)
+{
+    return true;
+}
+
+b8 update_playing(game_t *game)
+{
+    // begin the rendering ////////////////////////////////////
+    BeginDrawing();
+    ClearBackground(RAYWHITE);
+
+    // begin camera 3d mode ///////////////////////////////////
+    BeginMode3D(game->game_state->camera);
+    DrawGrid(10, 1.0f);
+    EndMode3D();
+    // end camera 3d mode /////////////////////////////////////
+
+    DrawFPS(10, 10);
+    // end the rendering //////////////////////////////////////
+    EndDrawing();
+    return true;
+}
+
 b8 game_init(game_t *game)
 {
     // define the camera
@@ -50,6 +114,9 @@ b8 game_update(game_t *game)
             }
             break;
 
+        case QUIT:
+            return false;
+
         default:
             printf("ERROR: uknown game state mode.\n");
             return false;
@@ -64,54 +131,3 @@ b8 game_shutdown()
     return true;
 }
 
-b8 update_title(game_t *game)
-{
-    i32 window_width = GetScreenWidth();
-    i32 window_height = GetScreenHeight();
-
-    button_t start_button = {
-        {1, 0, 0}, // uiid element {id, parent, child}
-        {500, 500, 60, 45}, // raylib Rectangle
-        "Start",
-        LIGHTGRAY
-    };
-     
-    // begin the rendering ////////////////////////////////////
-    BeginDrawing();
-    ClearBackground(DARKGRAY);
-    DrawFPS(10, 10);
-
-    // begin displaying UI elements
-    DrawText("Ark of the Covenant", window_width/2, window_height/2 - 25, 48, LIGHTGRAY);
-    if (button(game->ui_context, &start_button))
-    {
-        game->game_state->mode = PLAYING;
-    }
-
-    EndDrawing();
-    // end the rendering //////////////////////////////////////
-    return true;
-}
-
-b8 update_menu(game_t *game)
-{
-    return true;
-}
-
-b8 update_playing(game_t *game)
-{
-    // begin the rendering ////////////////////////////////////
-    BeginDrawing();
-    ClearBackground(RAYWHITE);
-
-    // begin camera 3d mode ///////////////////////////////////
-    BeginMode3D(game->game_state->camera);
-    DrawGrid(10, 1.0f);
-    EndMode3D();
-    // end camera 3d mode /////////////////////////////////////
-
-    DrawFPS(10, 10);
-    // end the rendering //////////////////////////////////////
-    EndDrawing();
-    return true;
-}

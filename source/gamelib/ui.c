@@ -28,7 +28,7 @@ b8 button(ui_context_t *ui, button_t *button)
     // check if button is active ///////////////////////////////////////
     if (ui->active.id == button->uiid.id)
     {
-        if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT))
+        if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT) && hovering_button(button))
         {
             if (ui->hot.id == button->uiid.id)
             {
@@ -53,10 +53,6 @@ b8 button(ui_context_t *ui, button_t *button)
     if (hovering_button(button))
     {
         ui->hot.id = button->uiid.id;
-    }
-    else
-    {
-        ui->hot.id = 0;
     }
 
     // draw the button /////////////////////////////////////////////////
