@@ -19,9 +19,6 @@ b8 init_app(game_t *game)
     }
     game->game_state = malloc(sizeof(game_state_t));
     memset(game->game_state, 0, sizeof(game_state_t));
-
-    game->ui_context = malloc(sizeof(ui_context_t));
-    memset(game->ui_context, 0, sizeof(ui_context_t));
     return true;
 }
 

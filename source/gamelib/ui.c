@@ -57,6 +57,6 @@ b8 button(ui_context_t *ui, button_t *button)
 
     // draw the button /////////////////////////////////////////////////
     DrawRectangleRec(button->rect, button->color);
-    DrawText(button->text, button->rect.x, button->rect.y, 14, BLACK);
+    DrawText(button->text, button->rect.x + 13, button->rect.y + 6, 14, BLACK);
     return result;
 }

@@ -1,5 +1,6 @@
 #include "gamelib/game.h"
 #include "gamelib/ui.h"
+#include "gamelib/title.h"
 
 #include <raylib.h>
 
@@ -7,40 +8,28 @@
 
 b8 update_title(game_t *game)
 {
-    i32 wwidth= GetScreenWidth();
-    i32 wheight = GetScreenHeight();
+    i32 screen_width = GetScreenWidth();
+    i32 screen_height = GetScreenHeight();
+    title_screen_t *title_screen = &game->game_state->title_screen;
 
-    // build the title screen UI ////////////////////////////////////////////
-    button_t start_button = {
-        {1, 0, 0}, // uiid element {id, parent, child}
-        {wwidth/2, 500, 100, 25}, // raylib Rectangle
-        "Start Game", // button text
-        LIGHTGRAY // button background color
-    };
-
-    button_t quit_button = {
-        {2,0,0},
-        {wwidth/2, 550, 100, 25},
-        "Exit Game",
-        LIGHTGRAY
-    };
+    // create the title screen UI ////////////////////////////////////////////
+    construct_title_screen(title_screen, screen_width, screen_height);
      
-    // begin the rendering /////////////////////////////////////////////////
+    // begin the rendering ///////////////////////////////////////////////////
     BeginDrawing();
     ClearBackground(DARKGRAY);
     DrawFPS(10, 10);
 
     // begin displaying UI elements
-    DrawText("Ark of the Covenant", wwidth/2 - 200, wheight/2 - 50, 48, LIGHTGRAY);
-    if (button(game->ui_context, &start_button))
+    DrawText("Ark of the Covenant", screen_width/2 - 230, screen_height/2 - 60, 48, LIGHTGRAY);
+    if (button(&title_screen->ui_context, &title_screen->start_button))
     {
         game->game_state->mode = PLAYING;
     }
-    if (button(game->ui_context, &quit_button))
+    if (button(&title_screen->ui_context, &title_screen->quit_button))
     {
         game->game_state->mode = QUIT;
     }
-
     EndDrawing();
     // end the rendering ///////////////////////////////////////////////////
     return true;
@@ -53,18 +42,18 @@ b8 update_menu(game_t *game)
 
 b8 update_playing(game_t *game)
 {
-    // begin the rendering ////////////////////////////////////
+    // begin the rendering /////////////////////////////////////////////////
     BeginDrawing();
     ClearBackground(RAYWHITE);
 
-    // begin camera 3d mode ///////////////////////////////////
+    // begin camera 3d mode ////////////////////////////////////////////////
     BeginMode3D(game->game_state->camera);
     DrawGrid(10, 1.0f);
     EndMode3D();
-    // end camera 3d mode /////////////////////////////////////
+    // end camera 3d mode //////////////////////////////////////////////////
 
     DrawFPS(10, 10);
-    // end the rendering //////////////////////////////////////
+    // end the rendering ///////////////////////////////////////////////////
     EndDrawing();
     return true;
 }
