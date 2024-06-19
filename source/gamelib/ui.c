@@ -12,18 +12,6 @@ static inline b8 hovering_button(button_t *button)
 
 b8 button(ui_context_t *ui, button_t *button)
 {
-    if (!ui)
-    {
-        printf("ERROR: ui context was null!\n");
-        return false;
-    }
-
-    if (!button)
-    {
-        printf("ERROR: button was null!\n");
-        return false;
-    }
-
     b8 result = false;
     // check if button is active ///////////////////////////////////////
     if (ui->active.id == button->uiid.id)
