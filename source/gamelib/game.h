@@ -7,8 +7,6 @@
 typedef struct game_state {
     scene_t scenes[MAX_SCENES];
     scene_type_t current_scene;
-
-    Camera3D camera;
 } game_state_t;
 
 typedef struct game {

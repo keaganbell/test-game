@@ -15,6 +15,7 @@ typedef enum scene_type {
 typedef struct scene {
     b8 initialized;
     ui_context_t ui;
+    Camera3D camera;
     
     b8   (*scene_init)(game_t *game);
     b8 (*scene_update)(game_t *game);

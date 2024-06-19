@@ -3,6 +3,8 @@
 #include "gamelib/ui.h"
 
 b8 title_init(game_t *game) {
+    scene_t *scene = &game->state->scenes[TITLE_SCENE];
+    scene->initialized = true;
     return true;
 }
 
@@ -12,16 +14,13 @@ b8 title_update(game_t *game) {
 }
 
 b8 menu_init(game_t *game) {
-    game->state->scenes[MENU_SCENE].initialized = true;
+    scene_t *scene = &game->state->scenes[MENU_SCENE];
+    scene->initialized = true;
     return true;
 }
 
 b8 menu_update(game_t *game) {
-    static b8 first = true;
-    if (first) {
-        first = false;
-        printf("INFO: running menu_update.\n");
-    }
+    scene_t *scene = &game->state->scenes[MENU_SCENE];
     button_t start_button = {
         {1, 0, 0}, // uiid element {id, parent, child}
         {game->width/2 - 50, game->height/2 + 100, 100, 25}, // raylib Rectangle
@@ -35,10 +34,10 @@ b8 menu_update(game_t *game) {
         "Quit Game",
         LIGHTGRAY
     };
-    scene_t *scene = &game->state->scenes[MENU_SCENE];
     BeginDrawing();
     ClearBackground(DARKGRAY);
     if (button(&scene->ui, &start_button)) {
+        // begin transition event to play scene
         game->state->current_scene = PLAY_SCENE;
     }
     if (button(&scene->ui, &quit_button)) {
@@ -49,17 +48,29 @@ b8 menu_update(game_t *game) {
 }
 
 b8 play_init(game_t *game) {
-    game->state->camera.position = (Vector3){ 0.0f, 10.0f, 6.0f };   // Camera position
-    game->state->camera.target = (Vector3){ 0.0f, 0.0f, 0.0f };      // Camera looking at point
-    game->state->camera.up = (Vector3){ 0.0f, 1.0f, 0.0f };          // Camera up vector (rotation towards target)
-    game->state->camera.fovy = 45.0f;                                // Camera field-of-view Y
-    game->state->camera.projection = CAMERA_PERSPECTIVE;             // Camera mode type
+    scene_t *scene = &game->state->scenes[PLAY_SCENE];
+    scene->initialized = true;
+    scene->camera.position = (Vector3){ 0.0f, 10.0f, 6.0f };   // Camera position
+    scene->camera.target = (Vector3){ 0.0f, 0.0f, 0.0f };      // Camera looking at point
+    scene->camera.up = (Vector3){ 0.0f, 1.0f, 0.0f };          // Camera up vector (rotation towards target)
+    scene->camera.fovy = 45.0f;                                // Camera field-of-view Y
+    scene->camera.projection = CAMERA_PERSPECTIVE;             // Camera mode type
     printf("INFO: camera initialized successfully.\n");
-    game->state->scenes[PLAY_SCENE].initialized = true;
     return true;
 }
 
 b8 play_update(game_t *game) {
+    scene_t *scene = &game->state->scenes[PLAY_SCENE];
+    // drawing /////////////////////////////////////////
+    BeginDrawing();
+    ClearBackground(RAYWHITE);
+
+    BeginMode3D(scene->camera);
+    DrawGrid(10, 1.0f);
+    EndMode3D();
+
+    EndDrawing();
+    // drawing /////////////////////////////////////////
     return true;
 }
 
