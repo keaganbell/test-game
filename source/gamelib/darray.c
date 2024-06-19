@@ -37,7 +37,8 @@ void darray_destroy(void* array)
     {
         u64 header_size = sizeof(darray_header_t);
         darray_header_t* header = (darray_header_t*)((u8*)array - header_size);
-        u64 total_size = header_size + header->capacity * header->stride;
+        // variable is a remnant of Kohi's custom free() function
+//        u64 total_size = header_size + header->capacity * header->stride;
         free(header);
     }
 }
@@ -99,7 +100,7 @@ void* darray_pop_at(void* array, u64 index, void* dest)
     u64 stride = darray_stride(array);
     if (index >= length)
     {
-        printf("ERROR: Index outside the bounds of this array! Length: %i, index: %index\n", length, index);
+        printf("ERROR: Index outside the bounds of this array! Length: %lli, index: %llindex\n", length, index);
         return array;
     }
 
@@ -124,7 +125,7 @@ void* _darray_insert_at(void* array, u64 index, void* value_ptr)
     u64 stride = darray_stride(array);
     if (index >= length)
     {
-        printf("ERROR: Index outside the bounds of this array! Length: %i, index: %index\n", length, index);
+        printf("ERROR: Index outside the bounds of this array! Length: %lli, index: %llindex\n", length, index);
         return array;
     }
     if (length >= darray_capacity(array))

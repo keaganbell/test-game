@@ -8,6 +8,13 @@
 
 b8 update_title(game_t *game)
 {
+    // do some cool intro
+    game->game_state->mode = MENU;
+    return true;
+}
+
+b8 update_menu(game_t *game)
+{
     i32 screen_width = GetScreenWidth();
     i32 screen_height = GetScreenHeight();
     title_screen_t *title_screen = &game->game_state->title_screen;
@@ -32,11 +39,6 @@ b8 update_title(game_t *game)
     }
     EndDrawing();
     // end the rendering ///////////////////////////////////////////////////
-    return true;
-}
-
-b8 update_menu(game_t *game)
-{
     return true;
 }
 
