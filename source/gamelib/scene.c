@@ -19,6 +19,25 @@ b8 menu_init(game_t *game) {
     return true;
 }
 
+static inline u8 clamp_accumulate_byte(u8 byte_in, u8 byte_add) {
+    u8 result = byte_in + byte_add;
+    return result > 0xff ? 0xff : result;
+}
+
+b8 menu_transition(game_t *game) {
+    coroutine_t *coroutine = &game->state->coroutines[0];
+    stopwatch_t *timer = &coroutine->timer;
+    timer->elapsed_time += GetFrameTime();
+    Color *color = &game->state->scenes[MENU_SCENE].transition_color;
+    color->a = clamp_accumulate_byte(color->a, 0x01);
+    coroutine->done = timer->elapsed_time >= timer->target_time;
+    if (coroutine->done) {
+        printf("INFO: menu_transition coroutine is done!!\n");
+        game->state->current_scene = PLAY_SCENE;
+    }
+    return coroutine->done;
+}
+
 b8 menu_update(game_t *game) {
     scene_t *scene = &game->state->scenes[MENU_SCENE];
     button_t start_button = {
@@ -35,14 +54,23 @@ b8 menu_update(game_t *game) {
         LIGHTGRAY
     };
     BeginDrawing();
+    DrawFPS(10, 10);
     ClearBackground(DARKGRAY);
-    if (button(&scene->ui, &start_button)) {
+    if (button(&scene->ui_context, &start_button)) {
         // begin transition event to play scene
-        game->state->current_scene = PLAY_SCENE;
+        // start_button.disabled = true;
+        coroutine_t transition = {
+            0,
+            {2.0f, 0.0f},
+            false,
+            &menu_transition
+        };
+        begin_coroutine(game, &transition);
     }
-    if (button(&scene->ui, &quit_button)) {
+    if (button(&scene->ui_context, &quit_button)) {
         return false;
     }
+    DrawRectangle(0, 0, game->width, game->height, scene->transition_color);
     EndDrawing();
     return true;
 }

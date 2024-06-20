@@ -14,8 +14,9 @@ typedef enum scene_type {
 
 typedef struct scene {
     b8 initialized;
-    ui_context_t ui;
+    ui_context_t ui_context;
     Camera3D camera;
+    Color transition_color;
     
     b8   (*scene_init)(game_t *game);
     b8 (*scene_update)(game_t *game);

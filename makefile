@@ -26,18 +26,18 @@ GAMEOBJS:=$(patsubst $(GAMESRCDIR)/%.c, $(OBJDIR)/%.o, $(GAMESRC))
 # default build config is development unless specified at make runtime
 # e.g., make TARGET_CONFIG=release clean all
 ifeq ($(TARGET_CONFIG), debug)
-	$(BUILD_CONFIG)=debug
+BUILD_CONFIG=debug
 else ifeq ($(TARGET_CONFIG), release)
-	$(BUILD_CONFIG)=release
+BUILD_CONFIG=release
 endif
 
 ifeq ($(BUILD_CONFIG), dev)
-	$(CFLAGS) += -g
-	$(DEFINES) += -DHOTRELOAD
+CFLAGS += -g -ggdb
+DEFINES += -DHOTRELOAD
 else ifeq ($(BUILD_CONFIG), debug)
-	$(CFLAGS) += -g -O2
+CFLAGS += -g -O2
 else ifeq ($(BUILD_CONFIG), release)
-	$(CFLAGS) += -O3
+CFLAGS += -O3
 endif
 
 

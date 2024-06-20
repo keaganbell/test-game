@@ -5,9 +5,10 @@
 #include <raylib.h>
 
 #include "defines.h"
+#include "loaddl.h"
+#include "gamelib/coroutine.h"
 #include "gamelib/game.h"
 #include "gamelib/hotkeys.h"
-#include "loaddl.h"
 
 
 b8 init_game(game_t *game) {
@@ -40,7 +41,7 @@ int main(void) {
     // begin the game loop ///////////////////////////////////////////////////
     SetConfigFlags(FLAG_WINDOW_RESIZABLE | FLAG_WINDOW_ALWAYS_RUN);
     InitWindow(game.width, game.height, "My Game Window");
-    SetTargetFPS(60);
+//    SetTargetFPS(60);
     while (!WindowShouldClose()) {
         if (IsWindowResized()) {
             game.width  = GetScreenWidth();
@@ -59,6 +60,12 @@ int main(void) {
                 printf("ERROR: game did not shutdown gracefully.\n");
             }
             break;
+        }
+        for (i32 i = 0; i < MAX_COROUTINES; ++i) {
+            coroutine_t *coroutine = &game.state->coroutines[i];
+            if (coroutine->update != 0 && !coroutine->done) {
+                coroutine->update(&game);
+            }
         }
     }
     CloseWindow();
